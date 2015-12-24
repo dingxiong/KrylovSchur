@@ -1,4 +1,5 @@
 function [Q, H] = truncateKrylov(Q, H, k, m)
+% truncate Krylov subsapce
     
 %   Q(:, k+1) = Q(:, m+1);
 %   H(k+1, 1:k) = H(m+1, 1:k);
