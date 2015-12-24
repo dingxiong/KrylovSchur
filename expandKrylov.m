@@ -1,4 +1,9 @@
 function [Q, H] = expandKrylov(Ax, Q, H, sk, ek)
+% expand Krylov subspace.
+%  The function contruct the sk+1, sk+2, ..., ek_th column of Q.
+% Parameters:
+%   sk       start index
+%   ek       end index
 
     for k = sk+1 : ek
         v = Ax(Q(:, k));                % A * Q(:, k)
