@@ -16,21 +16,33 @@ function [US, TS, isC] = sortSchur(A, k)
 %   This function assumes that eigenvalues are reordered by their 
 %   magnitudes. You can change this functions accordingly to obtain
 %   eigenvalues that you need.
+%   
+%  Also, take care when to determine isC, which should be
+%  determined by T not TS.
     
     [U, T] = schur(A, 'real');
-    es = ordeig(T);
-    
+    es = ordeig(T);     
     [~, ix] = sort(abs(es), 'descend');
-    select = zeros(length(es), 1);
-    select(ix(1:k)) = true;
-    [US,TS] = ordschur(U, T, select);
     
-    delta = (TS(k, k) - TS(k+1, k+1))^2 + 4 * TS(k+1, k) * TS(k, k+ ...
-                                                      1);
-    if delta < 0
-        isC = 1;
-    else
-        isC = 0;
-    end
+    % judge the k-th and (k+1)-th eigenvalues are conjugate complex
+    % pair or not.
+    %i = ix(k);
+    %delta = (T(i, i) - T(i+1, i+1))^2 + 4 * T(i+1, k) * T(i, k+1);
+    %if delta < 0
+    %    isC = 1;
+    %else 
+    %    isC = 0;
+    %end
+    
+    e1 = es(ix(k));
+    e2 = es(ix(k+1));
+    isC = ~isreal(e1) && isreal(e1+e2);
+    
+    select = zeros(length(es), 1);
+    select(ix(1:k+isC)) = true;
+    [US, TS] = ordschur(U, T, select); 
+    
+    %disp([(1:size(es, 1))', abs(es), ix]); 
+    %disp([(1:k+isC)', abs(ordeig(TS(1:k+isC, 1:k+isC)))]);
     
 end
