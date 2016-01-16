@@ -26,17 +26,20 @@ function [US, TS, isC] = sortSchur(A, k)
     
     % judge the k-th and (k+1)-th eigenvalues are conjugate complex
     % pair or not.
-    %i = ix(k);
-    %delta = (T(i, i) - T(i+1, i+1))^2 + 4 * T(i+1, k) * T(i, k+1);
-    %if delta < 0
-    %    isC = 1;
-    %else 
-    %    isC = 0;
-    %end
+    k1 = ix(k);
+    k2 = ix(k+1);
+    % here must use k2 not k1+1 because k1+1 maybe out of bounds
+    delta = (T(k1, k1) - T(k2, k2))^2 + 4 * T(k2, k1) * T(k1, k2);
+    if k2 - k1 == 1 && delta < 0
+        isC = 1;
+    else 
+        isC = 0;
+    end
     
-    e1 = es(ix(k));
-    e2 = es(ix(k+1));
-    isC = ~isreal(e1) && isreal(e1+e2);
+    % the following method has numerical round-off issue
+    %e1 = es(ix(k));
+    %e2 = es(ix(k+1));
+    %isC = ~isreal(e1) && isreal(e1+e2);
     
     select = zeros(length(es), 1);
     select(ix(1:k+isC)) = true;
