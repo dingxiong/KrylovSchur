@@ -22,15 +22,16 @@ function [US, TS, isC] = sortSchur(A, k)
     
     [U, T] = schur(A, 'real');
     es = ordeig(T);     
-    [~, ix] = sort(abs(es), 'descend');
+    [esp, ix] = sort(abs(es), 'descend');
     
     % judge the k-th and (k+1)-th eigenvalues are conjugate complex
     % pair or not.
     k1 = ix(k);
     k2 = ix(k+1);
     % here must use k2 not k1+1 because k1+1 maybe out of bounds
+    % Also, there is a degeneracy problem.
     delta = (T(k1, k1) - T(k2, k2))^2 + 4 * T(k2, k1) * T(k1, k2);
-    if k2 - k1 == 1 && delta < 0
+    if (k2 - k1 == 1 && delta < 0) 
         isC = 1;
     else 
         isC = 0;
