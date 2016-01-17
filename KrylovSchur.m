@@ -47,8 +47,8 @@ function [Q, H, isC, flag, nc, ni] = KrylovSchur(Ax, v1, n, k, m, maxIt, tol)
     i = 0;
     while i < maxIt && p <= k
         i = i+1;
-        %fprintf(1, 'i = %d, isC = %d, p = %d, r = %g \n', ...
-        %        i, isC, p, H(k+1+isC, p));
+        fprintf(1, 'i = %d, isC = %d, p = %d, r = %g \n', ...
+                i, isC, p, H(k+1+isC, p));
         
         % expand stage 
         [Q, H] = expandKrylov(Ax, Q, H, k+isC, m);
